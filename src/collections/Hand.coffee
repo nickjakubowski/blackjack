@@ -1,5 +1,7 @@
+pscore = 0
 class window.Hand extends Backbone.Collection
   model: Card
+
 
   initialize: (array, @deck, @isDealer) ->
 
@@ -28,6 +30,7 @@ class window.Hand extends Backbone.Collection
     [@minScore(), @minScore() + 10 * @hasAce()]
 
   stand: ->
+    pscore = @scores()[0]
     #console.log @model.get('dealerHand')
     @trigger 'standNow'
     #@isDealer = true
@@ -43,7 +46,15 @@ class window.Hand extends Backbone.Collection
          #player loses
 
   play: ->
+    console.log pscore
     @at(0).flip()
+    while @scores()[0] < 17 and @scores()[1] < 17
+      @add(@deck.pop())
+
+    if @scores()[0] > pscore and @scores()[0] < 21
+      alert 'You lose'
+
+    #not properly recording aces value of 1
 
 
 

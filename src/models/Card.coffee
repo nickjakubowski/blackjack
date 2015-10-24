@@ -11,19 +11,8 @@ class window.Card extends Backbone.Model
         when 12 then 'Queen'
         else params.rank
 
-  stand: ->
-    @get('dealerHand') console.log
-    #flip dealer card
-       #calculate score
-
-       #while dealer.score < 17 
-          #dealer.hit
-          #if score > players and score <= 21
-            #dealer wins
-           #else if score > 21
-             #player wins
-
   flip: ->
     @set 'revealed', !@get 'revealed'
     @
+
 

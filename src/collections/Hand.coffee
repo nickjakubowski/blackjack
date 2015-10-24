@@ -3,10 +3,12 @@ class window.Hand extends Backbone.Collection
 
   initialize: (array, @deck, @isDealer) ->
 
-  hit: ->
+  hit: -> #if @isDealer is true 
+       #while
     @add(@deck.pop())
-    console.log @scores()
-    alert "You lost" if @scores()[0] > 21
+    console.log @
+    answer = confirm "You lost! New game?" if @scores()[0] > 21
+    location.reload() if answer == true
     alert "black jack" if @scores()[0] == 21
     @last()
 
@@ -26,14 +28,22 @@ class window.Hand extends Backbone.Collection
     [@minScore(), @minScore() + 10 * @hasAce()]
 
   stand: ->
-    console.log @.Dealer
-    #flip dealer card
-       #calculate score
+    #console.log @model.get('dealerHand')
+    @trigger 'standNow'
+    #@isDealer = true
+    #@trigger 'standing'
+    #game switches to dealer
+       #dealer.flip()
+      #while dealer < 17 
+      #dealer.hit
+         #if dealer hand > 21
+           #player wins
 
-       #while dealer.score < 17 
-          #dealer.hit
-          #if score > players and score <= 21
-            #dealer wins
-           #else if score > 21
-             #player wins
+      #if dealer.hand > 17 and > player hand\
+         #player loses
+
+  play: ->
+    @at(0).flip()
+
+
 

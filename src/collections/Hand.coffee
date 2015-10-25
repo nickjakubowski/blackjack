@@ -1,4 +1,4 @@
-pscore = 0
+pScore = 0;  
 class window.Hand extends Backbone.Collection
   model: Card
 
@@ -6,13 +6,12 @@ class window.Hand extends Backbone.Collection
   initialize: (array, @deck, @isDealer) ->
 
   hit: -> #if @isDealer is true 
-       #while
     @add(@deck.pop())
-    console.log @
-    answer = confirm "You lost! New game?" if @scores()[0] > 21
+    answer = confirm "You lost! New game?" if @maxScore() > 21
     location.reload() if answer == true
-    alert "black jack" if @scores()[0] == 21
+    alert "black jack" if @maxScore() == 21
     @last()
+    pScore = @maxScore()
 
 
   hasAce: -> @reduce (memo, card) ->
@@ -23,6 +22,12 @@ class window.Hand extends Backbone.Collection
     score + if card.get 'revealed' then card.get 'value' else 0
   , 0
 
+  maxScore: -> 
+    if @scores()[1] > 21
+      @scores()[0] 
+    else
+      @scores()[1]   
+
   scores: ->
     # The scores are an array of potential scores.
     # Usually, that array contains one element. That is the only score.
@@ -30,7 +35,6 @@ class window.Hand extends Backbone.Collection
     [@minScore(), @minScore() + 10 * @hasAce()]
 
   stand: ->
-    pscore = @scores()[0]
     #console.log @model.get('dealerHand')
     @trigger 'standNow'
     #@isDealer = true
@@ -46,15 +50,25 @@ class window.Hand extends Backbone.Collection
          #player loses
 
   play: ->
-    console.log pscore
-    @at(0).flip()
-    while @scores()[0] < 17 and @scores()[1] < 17
+   
+     @at(0).flip()
+
+     while @maxScore() < 17
       @add(@deck.pop())
 
-    if @scores()[0] > pscore and @scores()[0] < 21
-      alert 'You lose'
+     if @maxScore() > 21
+      alert "Dealer bust"
+      return
 
-    #not properly recording aces value of 1
+     if @maxScore() > pScore
+      alert "Dealer wins"
+      return
+
+     if pScore > @maxScore()
+      alert "Player wins"
+      return
+
+
 
 
 
